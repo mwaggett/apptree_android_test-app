@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="10dp"
+    >
+<TextView
+    android:id="@+id/nameLabel"
+    android:text="Matthew Smith"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"/>
+    <TextView
+        android:layout_below="@id/nameLabel"
+        android:id="@+id/phoneLabel"
+        android:text="949-394-0522"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+    <TextView
+        android:text="matthew.smith@apptreesoftware.com"
+        android:id="@+id/emailLabel"
+        android:layout_below="@id/phoneLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:text="1234 Main St Portland Or 97209"
+        android:id="@+id/addressLabel"
+        android:layout_below="@id/emailLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+</RelativeLayout>

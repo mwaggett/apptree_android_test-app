@@ -1,0 +1,15 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto"
+      xmlns:tools="http://schemas.android.com/tools"
+      tools:context=".MainActivity">
+    <item android:id="@+id/action_settings"
+          android:title="@string/action_settings"
+          android:orderInCategory="100"
+          app:showAsAction="never"/>
+      <item android:id="@+id/address_sort"
+            android:title="Sort By Address"/>
+      <item android:id="@+id/name_sort"
+            android:title="Sort By Name"/>
+    <item android:id="@+id/format_phone"
+          android:title="Fix Phone # Formatting"/>
+</menu>

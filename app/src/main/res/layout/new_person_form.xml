@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/newPersonForm"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="invisible">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Add a New Person"
+        android:id="@+id/addPersonLabel"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="75dp"
+        android:textSize="20sp"/>
+
+    <EditText
+        android:id="@+id/firstNameText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="44dp"
+        android:hint="First Name"
+        android:layout_below="@+id/addPersonLabel"
+        android:layout_alignLeft="@+id/phoneText"
+        android:layout_alignStart="@+id/phoneText"/>
+    <EditText
+        android:id="@+id/lastNameText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="Last Name"
+        android:layout_alignTop="@+id/firstNameText"
+        android:layout_alignRight="@+id/phoneText"
+        android:layout_alignEnd="@+id/phoneText"/>
+    <EditText
+        android:layout_below="@id/lastNameText"
+        android:id="@+id/phoneText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:hint="Phone Number"
+        android:width="250dp"/>
+    <EditText
+        android:id="@+id/emailText"
+        android:layout_below="@id/phoneText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="Email"
+        android:layout_alignLeft="@+id/phoneText"
+        android:layout_alignStart="@+id/phoneText"
+        android:layout_alignRight="@+id/phoneText"
+        android:layout_alignEnd="@+id/phoneText"/>
+
+    <EditText
+        android:id="@+id/addressText"
+        android:layout_below="@id/emailText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="Address"
+        android:layout_alignLeft="@+id/emailText"
+        android:layout_alignStart="@+id/emailText"
+        android:layout_alignRight="@+id/emailText"
+        android:layout_alignEnd="@+id/emailText"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Save"
+        android:id="@+id/saveButton"
+        android:layout_below="@+id/addressText"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="40dp"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Cancel"
+        android:id="@+id/cancelButton"
+        android:layout_below="@+id/saveButton"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="40dp"/>
+
+</RelativeLayout>

@@ -92,8 +92,11 @@ public class ModelController {
     }
 
     private String formatPhoneNumber(String phoneNumber) {
-
-        return "";
+        String strippedNumber = phoneNumber.replaceAll("[^0-9]", "");
+        String areaCode = strippedNumber.substring(0,3);
+        String middleThree = strippedNumber.substring(3,6);
+        String lastFour = strippedNumber.substring(6);
+        return "("+areaCode+") "+middleThree+" - "+lastFour;
     }
 }
 

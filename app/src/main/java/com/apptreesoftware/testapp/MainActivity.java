@@ -9,10 +9,12 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -69,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
 
                 Person newPerson = new Person(id, firstName, lastName, email, phoneNumber, address);
                 people.add(newPerson);
-
+                adapter.notifyDataSetChanged();
                 toggleVisibility();
             }
         });
@@ -117,7 +119,14 @@ public class MainActivity extends AppCompatActivity {
     private void setupPeopleAdapter() {
         adapter = new PeopleAdapter(this,0, people);
         listView.setAdapter(adapter);
-
+        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                people.remove(position);
+                adapter.notifyDataSetChanged();
+                return true;
+            }
+        });
     }
 
     private void toggleVisibility() {

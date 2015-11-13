@@ -1,5 +1,6 @@
 package com.apptreesoftware.testapp;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -122,6 +123,7 @@ public class MainActivity extends AppCompatActivity {
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                // Eventually add AlertDialog to confirm delete.
                 people.remove(position);
                 adapter.notifyDataSetChanged();
                 return true;

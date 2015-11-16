@@ -144,7 +144,7 @@ public class MainActivity extends AppCompatActivity {
             phoneText.setText("");
             emailText.setText("");
             addressText.setText("");
-            newPersonForm.setVisibility(View.INVISIBLE);
+            newPersonForm.setVisibility(View.GONE);
         }
     }
 }

@@ -3,47 +3,58 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:padding="10dp">
-    <RelativeLayout
+
+    <android.support.v7.widget.CardView
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/personCell"
+        android:layout_gravity="center"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/personCell">
-        <TextView
-            android:id="@+id/nameLabel"
-            android:text="Matthew Smith"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-        <TextView
-            android:layout_below="@id/nameLabel"
-            android:id="@+id/phoneLabel"
-            android:text="949-394-0522"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-        <TextView
-            android:text="matthew.smith@apptreesoftware.com"
-            android:id="@+id/emailLabel"
-            android:layout_below="@id/phoneLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+        card_view:cardCornerRadius="4dp">
 
-        <TextView
-            android:text="1234 Main St Portland Or 97209"
-            android:id="@+id/addressLabel"
-            android:layout_below="@id/emailLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <TextView
+                android:id="@+id/nameLabel"
+                android:text="Matthew Smith"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <TextView
+                android:id="@+id/phoneLabel"
+                android:text="949-394-0522"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true" />
+            <TextView
+                android:text="matthew.smith@apptreesoftware.com"
+                android:id="@+id/emailLabel"
+                android:layout_below="@id/phoneLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
 
-        <Button
-            style="?android:attr/buttonStyleSmall"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Edit"
-            android:id="@+id/editButton"
-            android:layout_above="@+id/emailLabel"
-            android:layout_alignTop="@+id/nameLabel"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            android:focusable="false" />
-    </RelativeLayout>
+            <TextView
+                android:text="1234 Main St Portland Or 97209"
+                android:id="@+id/addressLabel"
+                android:layout_below="@id/emailLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <Button
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Edit"
+                android:id="@+id/editButton"
+                android:focusable="false"
+                android:layout_alignBottom="@+id/addressLabel"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignTop="@+id/emailLabel" />
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
 
     <include layout="@layout/new_person_form"/>
 

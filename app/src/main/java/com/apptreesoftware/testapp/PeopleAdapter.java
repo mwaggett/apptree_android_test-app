@@ -1,6 +1,7 @@
 package com.apptreesoftware.testapp;
 
 import android.content.Context;
+import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,7 +43,7 @@ public class PeopleAdapter extends ArrayAdapter<Person> {
         emailField.setText(person.email);
         addressField.setText(person.address);
 
-        final RelativeLayout personCell = (RelativeLayout) view.findViewById(R.id.personCell);
+        final CardView personCell = (CardView) view.findViewById(R.id.personCell);
         final RelativeLayout newPersonForm = (RelativeLayout) view.findViewById(R.id.newPersonForm);
         final TextView heading = (TextView) view.findViewById(R.id.addPersonLabel);
         final EditText firstNameText = (EditText) view.findViewById(R.id.firstNameText);

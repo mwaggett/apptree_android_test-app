@@ -2,7 +2,10 @@ package com.apptreesoftware.testapp;
 
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -13,13 +16,17 @@ import android.view.MenuItem;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
+
+    private int PICK_IMAGE_REQUEST = 1;
 
     ListView listView;
     PeopleAdapter adapter;
@@ -31,6 +38,8 @@ public class MainActivity extends AppCompatActivity {
     EditText phoneText;
     EditText emailText;
     EditText addressText;
+    ImageView imageInput;
+    Button addPhotoButton;
     Button saveButton;
     Button cancelButton;
 
@@ -50,12 +59,24 @@ public class MainActivity extends AppCompatActivity {
         phoneText = (EditText) findViewById(R.id.phoneText);
         emailText = (EditText) findViewById(R.id.emailText);
         addressText = (EditText) findViewById(R.id.addressText);
+        imageInput = (ImageView) findViewById(R.id.imageInput);
+        addPhotoButton = (Button) findViewById(R.id.addPhotoButton);
 
         fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 toggleVisibility();
+            }
+        });
+
+        addPhotoButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setType("image/*");
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
             }
         });
 
@@ -69,8 +90,17 @@ public class MainActivity extends AppCompatActivity {
                 String phoneNumber = phoneText.getText().toString();
                 String email = emailText.getText().toString();
                 String address = addressText.getText().toString();
+                imageInput.buildDrawingCache();
+                Bitmap image = imageInput.getDrawingCache();
 
-                Person newPerson = new Person(id, firstName, lastName, email, phoneNumber, address);
+                Person newPerson = new Person();
+                newPerson.setId(id);
+                newPerson.setFirstName(firstName);
+                newPerson.setLastName(lastName);
+                newPerson.setEmail(email);
+                newPerson.setPhoneNumber(phoneNumber);
+                newPerson.setAddress(address);
+                newPerson.setPhoto(image);
                 people.add(newPerson);
                 adapter.notifyDataSetChanged();
                 toggleVisibility();
@@ -84,6 +114,20 @@ public class MainActivity extends AppCompatActivity {
                 toggleVisibility();
             }
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            Uri uri = data.getData();
+            try {
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
+                imageInput.setImageBitmap(bitmap);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     @Override

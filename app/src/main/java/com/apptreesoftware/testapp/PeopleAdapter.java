@@ -1,6 +1,8 @@
 package com.apptreesoftware.testapp;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -36,12 +39,18 @@ public class PeopleAdapter extends ArrayAdapter<Person> {
         TextView phoneField = (TextView) view.findViewById(R.id.phoneLabel);
         TextView emailField = (TextView) view.findViewById(R.id.emailLabel);
         TextView addressField = (TextView) view.findViewById(R.id.addressLabel);
+        ImageView imageField = (ImageView) view.findViewById(R.id.personImage);
         Button editButton = (Button) view.findViewById(R.id.editButton);
 
         nameField.setText(person.firstName + " " + person.lastName);
         phoneField.setText(person.phoneNumber);
         emailField.setText(person.email);
         addressField.setText(person.address);
+        if (person.photo != null) {
+            imageField.setImageBitmap(person.photo);
+        } else {
+            imageField.setImageBitmap(BitmapFactory.decodeResource(getContext().getResources(), android.R.drawable.sym_def_app_icon));
+        }
 
         final CardView personCell = (CardView) view.findViewById(R.id.personCell);
         final RelativeLayout newPersonForm = (RelativeLayout) view.findViewById(R.id.newPersonForm);
@@ -51,6 +60,8 @@ public class PeopleAdapter extends ArrayAdapter<Person> {
         final EditText phoneText = (EditText) view.findViewById(R.id.phoneText);
         final EditText emailText = (EditText) view.findViewById(R.id.emailText);
         final EditText addressText = (EditText) view.findViewById(R.id.addressText);
+        final ImageView imageInput = (ImageView) view.findViewById(R.id.imageInput);
+//        final Button addPhotoButton = (Button) view.findViewById(R.id.addPhotoButton);
         final Button saveButton = (Button) view.findViewById(R.id.saveButton);
         final Button cancelButton = (Button) view.findViewById(R.id.cancelButton);
 
@@ -65,6 +76,9 @@ public class PeopleAdapter extends ArrayAdapter<Person> {
                 phoneText.setText(person.phoneNumber);
                 emailText.setText(person.email);
                 addressText.setText(person.address);
+                if (person.photo != null) {
+                    imageInput.setImageBitmap(person.photo);
+                }
 
                 saveButton.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -74,12 +88,15 @@ public class PeopleAdapter extends ArrayAdapter<Person> {
                         String phoneNumber = phoneText.getText().toString();
                         String email = emailText.getText().toString();
                         String address = addressText.getText().toString();
+                        imageInput.buildDrawingCache();
+                        Bitmap image = imageInput.getDrawingCache();
 
                         person.setFirstName(firstName);
                         person.setLastName(lastName);
                         person.setPhoneNumber(phoneNumber);
                         person.setEmail(email);
                         person.setAddress(address);
+                        person.setPhoto(image);
                         notifyDataSetChanged();
 
                         newPersonForm.setVisibility(View.GONE);

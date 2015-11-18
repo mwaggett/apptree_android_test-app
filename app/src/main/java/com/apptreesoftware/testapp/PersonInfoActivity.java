@@ -22,6 +22,7 @@ import java.util.ArrayList;
 
 public class PersonInfoActivity extends AppCompatActivity {
 
+    ModelController instance;
     ArrayList<Person> people;
     Person person;
     TextView heading;
@@ -41,8 +42,6 @@ public class PersonInfoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_person_info);
 
-        people = ModelController.getInstance().getPeople();
-
         heading = (TextView) findViewById(R.id.personFormHeading);
         firstNameText = (EditText) findViewById(R.id.firstNameText);
         lastNameText = (EditText) findViewById(R.id.lastNameText);
@@ -52,9 +51,12 @@ public class PersonInfoActivity extends AppCompatActivity {
         imageInput = (ImageView) findViewById(R.id.imageInput);
         addPhotoButton = (Button) findViewById(R.id.addPhotoButton);
 
+        instance = ModelController.getInstance(this);
+        people = instance.getPeople();
+
         final int personId = getIntent().getIntExtra("person_id", 0);
         if (personId > 0) {
-            person = ModelController.getInstance().personWithID(personId);
+            person = instance.personWithID(personId);
             heading.setText("Edit");
             firstNameText.setText(person.firstName);
             lastNameText.setText(person.lastName);

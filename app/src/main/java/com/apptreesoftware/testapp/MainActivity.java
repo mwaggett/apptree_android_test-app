@@ -26,6 +26,7 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
+    ModelController instance;
     ListView listView;
     PeopleAdapter adapter;
     ArrayList<Person> people;
@@ -37,8 +38,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
         listView = (ListView) findViewById(R.id.listView);
-        people = ModelController.getInstance().getPeople();
+        instance = ModelController.getInstance(this);
         setupPeopleAdapter();
 
         fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -69,20 +71,21 @@ public class MainActivity extends AppCompatActivity {
         if (id == R.id.action_settings) {
             return true;
         } else if (id == R.id.address_sort) {
-            ModelController.getInstance().sortByAddress();
+            ModelController.getInstance(this).sortByAddress();
             setupPeopleAdapter();
         } else if (id == R.id.name_sort) {
-            ModelController.getInstance().sortByName();
+            ModelController.getInstance(this).sortByName();
             setupPeopleAdapter();
         } else if (id == R.id.format_phone) {
-            ModelController.getInstance().formatPhoneNumbers();
+            ModelController.getInstance(this).formatPhoneNumbers();
             setupPeopleAdapter();
         }
 
         return super.onOptionsItemSelected(item);
     }
 
-    private void setupPeopleAdapter() {
+    protected void setupPeopleAdapter() {
+        people = instance.getPeople();
         adapter = new PeopleAdapter(this,0, people);
         listView.setAdapter(adapter);
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {

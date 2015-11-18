@@ -2,14 +2,13 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:id="@+id/newPersonForm"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:visibility="gone">
+                android:layout_height="match_parent">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Add a New Person"
-        android:id="@+id/addPersonLabel"
+        android:id="@+id/personFormHeading"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="25dp"
@@ -21,7 +20,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="44dp"
         android:hint="First Name"
-        android:layout_below="@+id/addPersonLabel"
+        android:layout_below="@+id/personFormHeading"
         android:layout_alignLeft="@+id/phoneText"
         android:layout_alignStart="@+id/phoneText"/>
     <EditText

@@ -1,5 +1,6 @@
 package com.apptreesoftware.testapp;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -94,17 +95,34 @@ public class PersonInfoActivity extends AppCompatActivity {
                 imageInput.buildDrawingCache();
                 Bitmap image = imageInput.getDrawingCache();
 
-                person.setFirstName(firstName);
-                person.setLastName(lastName);
-                person.setEmail(email);
-                person.setPhoneNumber(phoneNumber);
-                person.setAddress(address);
-                person.setPhoto(image);
-                if (personId == 0) {
-                    people.add(person);
+                String strippedNumber = phoneNumber.replaceAll("[^0-9]", "");
+                if (phoneNumber.length() > 0 && strippedNumber.length() != 10) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(PersonInfoActivity.this)
+                            .setTitle("Oops!")
+                            .setMessage("That is not a valid phone number.")
+                            .setPositiveButton("OK", null);
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+                } else if (email.length() > 0 && !email.matches("(.+)@(.+)")) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(PersonInfoActivity.this)
+                            .setTitle("Oops!")
+                            .setMessage("That is not a valid email address.")
+                            .setPositiveButton("OK", null);
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+                } else {
+                    person.setFirstName(firstName);
+                    person.setLastName(lastName);
+                    person.setEmail(email);
+                    person.setPhoneNumber(phoneNumber);
+                    person.setAddress(address);
+                    person.setPhoto(image);
+                    if (personId == 0) {
+                        people.add(person);
+                    }
+                    Intent intent = new Intent(PersonInfoActivity.this, MainActivity.class);
+                    startActivity(intent);
                 }
-                Intent intent = new Intent(PersonInfoActivity.this, MainActivity.class);
-                startActivity(intent);
             }
         });
 

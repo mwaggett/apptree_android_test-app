@@ -4,11 +4,8 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -16,12 +13,7 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.Request;
@@ -56,7 +48,6 @@ public class MainActivity extends AppCompatActivity {
         instance = ModelController.getInstance(this, new Callback() {
             @Override
             public void onFailure(Request request, IOException e) {
-                Log.v(TAG, e.getMessage());
                 errorAlert();
             }
             @Override
@@ -81,7 +72,6 @@ public class MainActivity extends AppCompatActivity {
                             }
                             person.setPhoto(photo);
                             people.add(person);
-                            Log.v(TAG, people.get(i).getFullName());
                         }
                     } else {
                         errorAlert();
@@ -93,9 +83,9 @@ public class MainActivity extends AppCompatActivity {
                         }
                     });
                 } catch (IOException e) {
-                    Log.e(TAG, "Exception caught: ", e);
+                    errorAlert();
                 } catch (JSONException e) {
-                    Log.e(TAG, "Exception caught: ", e);
+                    errorAlert();
                 }
             }
         });
@@ -158,6 +148,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void errorAlert() {
-        Log.e(TAG, "ERROR!");
+        AlertDialog.Builder builder = new AlertDialog.Builder(this)
+                .setTitle("Oops!")
+                .setMessage("There was an error. Please try again.")
+                .setPositiveButton("OK", null);
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 }

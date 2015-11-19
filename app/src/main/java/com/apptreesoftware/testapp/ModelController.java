@@ -1,31 +1,17 @@
 package com.apptreesoftware.testapp;
 
-import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.util.Log;
 import com.squareup.okhttp.Call;
 import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
-import com.squareup.okhttp.Response;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Collections;
-import java.util.Scanner;
 
-/**
- * Created by matthew on 10/12/15.
- */
 public class ModelController {
 
     private static final String TAG = ModelController.class.getSimpleName();
@@ -102,68 +88,13 @@ public class ModelController {
         }
     }
 
-//    private void fetchPeople(final MainActivity context) {
-//        String peopleUrl = "https://www.dropbox.com/s/0qe641r5ouao65h/people.json?dl=1";
-//
-//        if (isNetworkAvailable()) {
-//            OkHttpClient client = new OkHttpClient();
-//            Request request = new Request.Builder()
-//                    .url(peopleUrl)
-//                    .build();
-//            Call call = client.newCall(request);
-//            call.enqueue(new Callback() {
-//                @Override
-//                public void onFailure(Request request, IOException e) {
-//                    Log.v(TAG, e.getMessage());
-//                    errorAlert();
-//                }
-//                @Override
-//                public void onResponse(Response response) throws IOException {
-//                    try {
-//                        String jsonData = response.body().string();
-//                        if (response.isSuccessful()) {
-//                            JSONObject object = new JSONObject(jsonData);
-//                            JSONArray peopleJSON = object.getJSONArray("people");
-//                            for (int i = 0; i < peopleJSON.length(); i++) {
-//                                JSONObject personJSON = peopleJSON.getJSONObject(i);
-//                                Person person = new Person();
-//                                person.setId(i+1);
-//                                person.setFirstName(personJSON.getString("firstName"));
-//                                person.setLastName(personJSON.getString("lastName"));
-//                                person.setEmail(personJSON.getString("email"));
-//                                person.setAddress(personJSON.getString("address"));
-//                                Bitmap photo = null;
-//                                URL photoURL = new URL(personJSON.getString("photo"));
-//                                if (photoURL != null) {
-//                                    photo = BitmapFactory.decodeStream(photoURL.openConnection().getInputStream());
-//                                }
-//                                person.setPhoto(photo);
-//                                people.add(person);
-//                                Log.v(TAG, people.get(i).getFullName());
-//                            }
-//                        } else {
-//                            errorAlert();
-//                        }
-//                        context.runOnUiThread(new Runnable() {
-//                            @Override
-//                            public void run() {
-//                                context.adapter.notifyDataSetChanged();
-//                            }
-//                        });
-//                    } catch (IOException e) {
-//                        Log.e(TAG, "Exception caught: ", e);
-//                    } catch (JSONException e) {
-//                        Log.e(TAG, "Exception caught: ", e);
-//                    }
-//                }
-//            });
-//        } else {
-//            errorAlert();
-//        }
-//    }
-
     private void errorAlert() {
-        Log.e(TAG, "ERROR!");
+        AlertDialog.Builder builder = new AlertDialog.Builder(mContext)
+                .setTitle("Oops!")
+                .setMessage("There was an error. Please try again.")
+                .setPositiveButton("OK", null);
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     private boolean isNetworkAvailable() {

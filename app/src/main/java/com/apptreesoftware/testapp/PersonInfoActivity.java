@@ -1,20 +1,18 @@
 package com.apptreesoftware.testapp;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.squareup.okhttp.Callback;
@@ -22,7 +20,6 @@ import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class PersonInfoActivity extends AppCompatActivity {
@@ -64,7 +61,6 @@ public class PersonInfoActivity extends AppCompatActivity {
         instance = ModelController.getInstance(this, new Callback() {
             @Override
             public void onFailure(Request request, IOException e) {
-                Log.v(TAG, e.getMessage());
                 errorAlert();
             }
 
@@ -178,6 +174,11 @@ public class PersonInfoActivity extends AppCompatActivity {
     }
 
     private void errorAlert() {
-        Log.e(TAG, "ERROR!");
+        AlertDialog.Builder builder = new AlertDialog.Builder(this)
+                .setTitle("Oops!")
+                .setMessage("There was an error. Please try again.")
+                .setPositiveButton("OK", null);
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 }

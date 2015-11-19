@@ -148,11 +148,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void errorAlert() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this)
-                .setTitle("Oops!")
-                .setMessage("There was an error. Please try again.")
-                .setPositiveButton("OK", null);
-        AlertDialog dialog = builder.create();
-        dialog.show();
+        ErrorDialogFragment dialog = new ErrorDialogFragment();
+        dialog.show(getFragmentManager(), "error_dialog");
     }
 }

@@ -1,6 +1,7 @@
 package com.apptreesoftware.testapp;
 
 import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -138,10 +139,21 @@ public class MainActivity extends AppCompatActivity {
         listView.setAdapter(adapter);
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                // Eventually add AlertDialog to confirm delete.
-                people.remove(position);
-                adapter.notifyDataSetChanged();
+            public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this)
+                        .setTitle("Are you sure you want to delete this contact?")
+                        .setMessage("This cannot be undone.")
+                        .setNegativeButton("Cancel", null)
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        people.remove(position);
+                        adapter.notifyDataSetChanged();
+                            }
+                        });
+                builder.create();
+                AlertDialog dialog = builder.create();
+                dialog.show();
                 return true;
             }
         });

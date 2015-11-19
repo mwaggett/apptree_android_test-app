@@ -3,6 +3,7 @@ package com.apptreesoftware.testapp;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -10,6 +11,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -21,10 +23,21 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.squareup.okhttp.Callback;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.Response;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
+
+    private static final String TAG = MainActivity.class.getSimpleName();
 
     ModelController instance;
     ListView listView;
@@ -40,7 +53,52 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         listView = (ListView) findViewById(R.id.listView);
-        instance = ModelController.getInstance(this);
+        instance = ModelController.getInstance(this, new Callback() {
+            @Override
+            public void onFailure(Request request, IOException e) {
+                Log.v(TAG, e.getMessage());
+                errorAlert();
+            }
+            @Override
+            public void onResponse(Response response) throws IOException {
+                try {
+                    String jsonData = response.body().string();
+                    if (response.isSuccessful()) {
+                        JSONObject object = new JSONObject(jsonData);
+                        JSONArray peopleJSON = object.getJSONArray("people");
+                        for (int i = 0; i < peopleJSON.length(); i++) {
+                            JSONObject personJSON = peopleJSON.getJSONObject(i);
+                            Person person = new Person();
+                            person.setId(i+1);
+                            person.setFirstName(personJSON.getString("firstName"));
+                            person.setLastName(personJSON.getString("lastName"));
+                            person.setEmail(personJSON.getString("email"));
+                            person.setAddress(personJSON.getString("address"));
+                            Bitmap photo = null;
+                            URL photoURL = new URL(personJSON.getString("photo"));
+                            if (photoURL != null) {
+                                photo = BitmapFactory.decodeStream(photoURL.openConnection().getInputStream());
+                            }
+                            person.setPhoto(photo);
+                            people.add(person);
+                            Log.v(TAG, people.get(i).getFullName());
+                        }
+                    } else {
+                        errorAlert();
+                    }
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            adapter.notifyDataSetChanged();
+                        }
+                    });
+                } catch (IOException e) {
+                    Log.e(TAG, "Exception caught: ", e);
+                } catch (JSONException e) {
+                    Log.e(TAG, "Exception caught: ", e);
+                }
+            }
+        });
         setupPeopleAdapter();
 
         fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -71,13 +129,13 @@ public class MainActivity extends AppCompatActivity {
         if (id == R.id.action_settings) {
             return true;
         } else if (id == R.id.address_sort) {
-            ModelController.getInstance(this).sortByAddress();
+            instance.sortByAddress();
             setupPeopleAdapter();
         } else if (id == R.id.name_sort) {
-            ModelController.getInstance(this).sortByName();
+            instance.sortByName();
             setupPeopleAdapter();
         } else if (id == R.id.format_phone) {
-            ModelController.getInstance(this).formatPhoneNumbers();
+            instance.formatPhoneNumbers();
             setupPeopleAdapter();
         }
 
@@ -97,5 +155,9 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
+    }
+
+    private void errorAlert() {
+        Log.e(TAG, "ERROR!");
     }
 }

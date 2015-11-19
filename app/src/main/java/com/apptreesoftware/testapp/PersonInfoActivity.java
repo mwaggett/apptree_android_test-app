@@ -7,6 +7,7 @@ import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,12 +17,19 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.squareup.okhttp.Callback;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.Response;
+
 import java.io.IOException;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class PersonInfoActivity extends AppCompatActivity {
 
+    private static final String TAG = PersonInfoActivity.class.getSimpleName();
+
+    int personId;
     ModelController instance;
     ArrayList<Person> people;
     Person person;
@@ -42,6 +50,8 @@ public class PersonInfoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_person_info);
 
+        personId = getIntent().getIntExtra("person_id", 0);
+
         heading = (TextView) findViewById(R.id.personFormHeading);
         firstNameText = (EditText) findViewById(R.id.firstNameText);
         lastNameText = (EditText) findViewById(R.id.lastNameText);
@@ -51,25 +61,21 @@ public class PersonInfoActivity extends AppCompatActivity {
         imageInput = (ImageView) findViewById(R.id.imageInput);
         addPhotoButton = (Button) findViewById(R.id.addPhotoButton);
 
-        instance = ModelController.getInstance(this);
-        people = instance.getPeople();
-
-        final int personId = getIntent().getIntExtra("person_id", 0);
-        if (personId > 0) {
-            person = instance.personWithID(personId);
-            heading.setText("Edit");
-            firstNameText.setText(person.firstName);
-            lastNameText.setText(person.lastName);
-            phoneText.setText(person.phoneNumber);
-            emailText.setText(person.email);
-            addressText.setText(person.address);
-            if (person.photo != null) {
-                imageInput.setImageBitmap(person.photo);
+        instance = ModelController.getInstance(this, new Callback() {
+            @Override
+            public void onFailure(Request request, IOException e) {
+                Log.v(TAG, e.getMessage());
+                errorAlert();
             }
-        } else {
-            person = new Person();
-            person.setId(people.size() + 1);
-        }
+
+            @Override
+            public void onResponse(Response response) throws IOException {
+                people = instance.getPeople();
+                setupForm(personId);
+            }
+        });
+        people = instance.getPeople();
+        setupForm(personId);
 
         addPhotoButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -117,6 +123,24 @@ public class PersonInfoActivity extends AppCompatActivity {
         });
     }
 
+    private void setupForm(int id) {
+        if (id > 0) {
+            person = instance.personWithID(personId);
+            heading.setText("Edit");
+            firstNameText.setText(person.firstName);
+            lastNameText.setText(person.lastName);
+            phoneText.setText(person.phoneNumber);
+            emailText.setText(person.email);
+            addressText.setText(person.address);
+            if (person.photo != null) {
+                imageInput.setImageBitmap(person.photo);
+            }
+        } else {
+            person = new Person();
+            person.setId(people.size() + 1);
+        }
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -151,5 +175,9 @@ public class PersonInfoActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void errorAlert() {
+        Log.e(TAG, "ERROR!");
     }
 }

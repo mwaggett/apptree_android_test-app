@@ -35,11 +35,11 @@ public class ModelController {
 
     private ArrayList<Person> people = new ArrayList<>();
 
-    public static ModelController getInstance(Context context) {
+    public static ModelController getInstance(Context context, Callback callback) {
         mContext = context;
         if ( instance == null ) {
             instance = new ModelController();
-            instance.fetchPeople((MainActivity) context);
+            instance.fetchPeople(callback);
 //            instance.createFakeData();
         }
         return instance;
@@ -87,7 +87,7 @@ public class ModelController {
         people.add(person);
     }
 
-    private void fetchPeople(final MainActivity context) {
+    private void fetchPeople(Callback callback) {
         String peopleUrl = "https://www.dropbox.com/s/0qe641r5ouao65h/people.json?dl=1";
 
         if (isNetworkAvailable()) {
@@ -96,56 +96,71 @@ public class ModelController {
                     .url(peopleUrl)
                     .build();
             Call call = client.newCall(request);
-            call.enqueue(new Callback() {
-                @Override
-                public void onFailure(Request request, IOException e) {
-                    Log.v(TAG, e.getMessage());
-                    errorAlert();
-                }
-                @Override
-                public void onResponse(Response response) throws IOException {
-                    try {
-                        String jsonData = response.body().string();
-                        if (response.isSuccessful()) {
-                            JSONObject object = new JSONObject(jsonData);
-                            JSONArray peopleJSON = object.getJSONArray("people");
-                            for (int i = 0; i < peopleJSON.length(); i++) {
-                                JSONObject personJSON = peopleJSON.getJSONObject(i);
-                                Person person = new Person();
-                                person.setId(i+1);
-                                person.setFirstName(personJSON.getString("firstName"));
-                                person.setLastName(personJSON.getString("lastName"));
-                                person.setEmail(personJSON.getString("email"));
-                                person.setAddress(personJSON.getString("address"));
-                                Bitmap photo = null;
-                                URL photoURL = new URL(personJSON.getString("photo"));
-                                if (photoURL != null) {
-                                    photo = BitmapFactory.decodeStream(photoURL.openConnection().getInputStream());
-                                }
-                                person.setPhoto(photo);
-                                people.add(person);
-                                Log.v(TAG, people.get(i).getFullName());
-                            }
-                        } else {
-                            errorAlert();
-                        }
-                        context.runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                context.adapter.notifyDataSetChanged();
-                            }
-                        });
-                    } catch (IOException e) {
-                        Log.e(TAG, "Exception caught: ", e);
-                    } catch (JSONException e) {
-                        Log.e(TAG, "Exception caught: ", e);
-                    }
-                }
-            });
+            call.enqueue(callback);
         } else {
             errorAlert();
         }
     }
+
+//    private void fetchPeople(final MainActivity context) {
+//        String peopleUrl = "https://www.dropbox.com/s/0qe641r5ouao65h/people.json?dl=1";
+//
+//        if (isNetworkAvailable()) {
+//            OkHttpClient client = new OkHttpClient();
+//            Request request = new Request.Builder()
+//                    .url(peopleUrl)
+//                    .build();
+//            Call call = client.newCall(request);
+//            call.enqueue(new Callback() {
+//                @Override
+//                public void onFailure(Request request, IOException e) {
+//                    Log.v(TAG, e.getMessage());
+//                    errorAlert();
+//                }
+//                @Override
+//                public void onResponse(Response response) throws IOException {
+//                    try {
+//                        String jsonData = response.body().string();
+//                        if (response.isSuccessful()) {
+//                            JSONObject object = new JSONObject(jsonData);
+//                            JSONArray peopleJSON = object.getJSONArray("people");
+//                            for (int i = 0; i < peopleJSON.length(); i++) {
+//                                JSONObject personJSON = peopleJSON.getJSONObject(i);
+//                                Person person = new Person();
+//                                person.setId(i+1);
+//                                person.setFirstName(personJSON.getString("firstName"));
+//                                person.setLastName(personJSON.getString("lastName"));
+//                                person.setEmail(personJSON.getString("email"));
+//                                person.setAddress(personJSON.getString("address"));
+//                                Bitmap photo = null;
+//                                URL photoURL = new URL(personJSON.getString("photo"));
+//                                if (photoURL != null) {
+//                                    photo = BitmapFactory.decodeStream(photoURL.openConnection().getInputStream());
+//                                }
+//                                person.setPhoto(photo);
+//                                people.add(person);
+//                                Log.v(TAG, people.get(i).getFullName());
+//                            }
+//                        } else {
+//                            errorAlert();
+//                        }
+//                        context.runOnUiThread(new Runnable() {
+//                            @Override
+//                            public void run() {
+//                                context.adapter.notifyDataSetChanged();
+//                            }
+//                        });
+//                    } catch (IOException e) {
+//                        Log.e(TAG, "Exception caught: ", e);
+//                    } catch (JSONException e) {
+//                        Log.e(TAG, "Exception caught: ", e);
+//                    }
+//                }
+//            });
+//        } else {
+//            errorAlert();
+//        }
+//    }
 
     private void errorAlert() {
         Log.e(TAG, "ERROR!");

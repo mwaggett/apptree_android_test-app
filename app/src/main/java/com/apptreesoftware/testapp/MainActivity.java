@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -145,10 +144,10 @@ public class MainActivity extends AppCompatActivity {
                         .setMessage("This cannot be undone.")
                         .setNegativeButton("Cancel", null)
                         .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        people.remove(position);
-                        adapter.notifyDataSetChanged();
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                people.remove(position);
+                                adapter.notifyDataSetChanged();
                             }
                         });
                 builder.create();

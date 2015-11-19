@@ -1,9 +1,10 @@
 package com.apptreesoftware.testapp;
 
-import android.app.AlertDialog;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.widget.Toast;
+
 import com.squareup.okhttp.Call;
 import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.OkHttpClient;
@@ -84,17 +85,8 @@ public class ModelController {
             Call call = client.newCall(request);
             call.enqueue(callback);
         } else {
-            errorAlert();
+            Toast.makeText(mContext, "Network unavailable.", Toast.LENGTH_LONG).show();
         }
-    }
-
-    private void errorAlert() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(mContext)
-                .setTitle("Oops!")
-                .setMessage("There was an error. Please try again.")
-                .setPositiveButton("OK", null);
-        AlertDialog dialog = builder.create();
-        dialog.show();
     }
 
     private boolean isNetworkAvailable() {

@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -49,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onFailure(Request request, IOException e) {
                 errorAlert();
+                Log.e(TAG, e.getMessage());
             }
             @Override
             public void onResponse(Response response) throws IOException {
@@ -75,6 +77,7 @@ public class MainActivity extends AppCompatActivity {
                         }
                     } else {
                         errorAlert();
+                        Log.e(TAG, "Response unsuccessful.");
                     }
                     runOnUiThread(new Runnable() {
                         @Override
@@ -84,8 +87,10 @@ public class MainActivity extends AppCompatActivity {
                     });
                 } catch (IOException e) {
                     errorAlert();
+                    Log.e(TAG, e.getMessage());
                 } catch (JSONException e) {
                     errorAlert();
+                    Log.e(TAG, e.getMessage());
                 }
             }
         });

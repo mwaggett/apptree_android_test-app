@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -62,6 +63,7 @@ public class PersonInfoActivity extends AppCompatActivity {
             @Override
             public void onFailure(Request request, IOException e) {
                 errorAlert();
+                Log.e(TAG, e.getMessage());
             }
 
             @Override
